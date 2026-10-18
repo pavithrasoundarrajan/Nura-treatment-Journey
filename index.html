@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f8faf7">
+<meta name="description" content="Healthcare Product Design Research Journey, an independent product design concept by Pavithra S.">
+<title>Nura Treatment Journey Healthcare Product Design Research</title>
+<style>
+:root{
+  --bg:#f8faf7; --paper:rgba(255, 255, 255,.78); --ink:#25332f; --muted: #71807a;
+  --sage: #dcebe1; --sage-strong: #8eaf9b; --blue: #e0edf5; --pink: #f6e2e4;
+  --lavender: #ece7f7; --butter: #f7efce; --line: rgba(49,75,65,.13);
+  --shadow:0 18px 60px rgba(56,79,68,.08); --radius: 26px;
+}
+*{box-sizing: border-box}
+html{scroll-behavior: smooth; scroll-padding-top: 100px}
+body{margin:0;background: var(--bg); color:var(--ink); font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height:1.65; overflow-x:hidden}
+a{color:inherit; text-decoration:none}
+button{font:inherit}
+::selection{background: #d7e8dc;color:#25332f}
+.ambient{position:fixed; inset: 0; overflow:hidden; pointer-events:none;z-index:-2}
+.bubble{position:absolute; border-radius: 50%; filter: blur(1px); opacity:.58; animation: float var(--duration, 22s) ease-in-out infinite alternate; transform: translate3d(0,0,0)}
+.bubble:nth-child(1){width: 240px; height:240px; left:-70px; top: 8%; background: radial-gradient(circle at 35% 30%, #f8dfe3, rgba(248, 223,227,.08) 72%);--duration:26s}
+.bubble:nth-child(2){width: 300px; height: 300px; right:-110px; top: 18%; background: radial-gradient(circle at 35% 30%, #d9e9f5, rgba(217,233,245,.05) 72%);--duration: 31s; animation-delay:-8s}
+.bubble:nth-child(3){width: 210px; height: 210px; left:30%; top:47%; background: radial-gradient(circle at 35% 30%, #e7e0f7, rgba(231,224,247,.04) 72%);--duration: 24s; animation-delay:-13s}
+.bubble:nth-child(4){width: 260px; height: 260px; right:15%; top: 70%; background: radial-gradient(circle at 35% 30%, #e0eddf, rgba(224,237,223,.05) 72%);--duration: 29s; animation-delay:-5s}
+.bubble:nth-child(5){width:140px; height:140px; left: 8%; top: 78%; background: radial-gradient(circle at 35% 30%, #f7edc9, rgba(247,237,201,.04) 72%);--duration: 21s; animation-delay:-10s}
+@keyframes float{0%{transform: translate3d(-18px,-20px,0) scale(.94)}50%{transform: translate3d(34px, 18px,0) scale(1.04)}100%{transform: translate3d(-8px, 45px,0) scale(1.08)}}
+
+.cursor-glow{position:fixed; width: 230px;height: 230px; border-radius: 50%; pointer-events:none;z-index:-1; background: radial-gradient(circle, rgba(220,235,225,.45), rgba(220, 235, 225,0) 70%); transform: translate(-50%,-50%); left:50%; top:50%; transition:opacity .2s}
+.progress-bar{position:fixed; top:0;left:0;width:0; height: 3px; background: linear-gradient(90deg, #9abda7, #b7c9e8, #e9bfc8); z-index:1000}
+.nav-wrap{position: sticky;top:0;z-index: 100; padding: 14px 4.5%; backdrop-filter:blur(18px); background:rgba(248, 250, 247, .78); border-bottom:1px solid rgba(49,75,65,.07)}
+nav{max-width: 1240px; margin:auto; display: flex; align-items:center; justify-content: space-between; gap:20px}
+.brand{font-weight:750; letter-spacing:-.04em; display: flex; align-items:center; gap: 10px; white-space:nowrap}
+.nav-links{display: flex; align-items:center; gap: 22px; font-size:12px; color:var(--muted)}
+.nav-links a {transition:color.2s}
+.nav-links a:hover,.nav-links a.active {color:#263e34}
+.nav-cta{padding: 9px 15px; border:1px solid var(--line); border-radius: 999px; font-size: 12px; background:rgba(255, 255, 255,.55)}
+main{max-width: 1180px; margin: auto; padding:0 28px}
+.hero{min-height: 78vh; display:grid; grid-template-columns:1.08fr .92fr; align-items:center; gap: 55px; padding:72px 0 78px}
+.eyebrow{display: inline-flex; align-items:center; gap: 9px;text-transform:uppercase; letter-spacing:.14em; font-size: 10px; font-weight: 750; color:#6b8577}
+.eyebrow:before{content:""; width: 22px; height: 1px; background: #8eaf9b}
+h1{font-size:clamp(48px, 7vw, 88px); line-height: .99; letter-spacing:-.075em; font-weight:650; margin: 22px 0 25px; max-width:700px}
+h1 em{font-style:normal;color:#789a86}
+.hero-copy{font-size:17px; max-width: 570px;color:#687770; line-height:1.8}
+.hero-actions{display: flex; flex-wrap:wrap; gap: 12px; margin-top:30px}
+.button{display: inline-flex; align-items:center; gap: 10px; border-radius: 999px; padding: 13px 19px; font-size: 13px; font-weight: 650; border:1px solid var(--line); transition: transform.25s, box-shadow.25s, background .25s; cursor:pointer}
+.button:hover{transform: translateY(-3px); box-shadow:0 12px 26px rgba(56,79,68,.1)}
+.button.primary{background: #2f473b;color: white; border-color: #2f473b}
+.button.secondary{background:rgba(255,255,255,.7)}
+.hero-visual{position:relative; min-height: 460px; display:grid; place-items:center}
+.orb{position:absolute; width: min(390px, 90%); aspect-ratio: 1; border-radius: 50%; background:radial-gradient(circle at 30% 24%, rgba(255, 255, 255,.9), rgba(221,237,226,.84) 35%, rgba(229,224,246,.68) 64%, rgba(248,225,228,.62)); box-shadow:inset -16px -24px 60px rgba(124,155,137,.12), 0 30px 90px rgba(103, 139, 117,.12); animation:orbfloat 7s ease-in-out infinite}
+@keyframes orbfloat {0%, 100%{transform: translateY(0) rotate(-3deg)} 50% {transform: translateY(-12px) rotate(3deg)}}
+.orbit{position:absolute; width:450px; height: 250px; border: 1px solid rgba(116,151,131,.25); border-radius: 50%; transform: rotate(-28deg)}
+.orbit.two{width:420px;height:300px; transform: rotate(48deg); border-color:rgba(173,155,206,.25)}
+.hero-card{position:absolute; background: rgba(255,255,255,.84); border: 1px solid rgba(255,255,255,.85); box-shadow: var(--shadow); backdrop-filter:blur(18px); border-radius: 22px; padding: 18px 20px; animation: cardfloat 6s ease-in-out infinite}
+@keyframes cardfloat{0%, 100%{transform: translateY(0)} 50% {transform: translateY(-9px)}}
+.hero-card small{display:block;color:var(--muted); font-size: 10px; text-transform:uppercase; letter-spacing:.1em}
+.hero-card strong{display:block;font-size: 15px; margin:4px 0}
+.hero-card p{margin:0;font-size: 11px;color:var(--muted)}
+.card-one{top: 15%; left: 0; animation-delay:-2s}
+.card-two{right:-10px; bottom: 18%; animation-delay:-4s}
+.card-three{left:10%; bottom:4%; animation-delay:-1s}
+.status-dot{display:inline-block; width:7px; height:7px; border-radius: 50%; background:#8ab59a;margin-right:5px}
+.hero-stats{display: flex; gap: 24px; margin-top: 35px; flex-wrap:wrap}
+.stat{padding-left: 13px; border-left: 2px solid #dcebe1}
+.stat strong{display:block;font-size:16px}
+.stat span{font-size:11px;color:var(--muted)}
+section{padding: 84px 0; border-top: 1px solid var(--line)}
+.section-head{display:grid; grid-template-columns:.7fr 1.3fr; gap: 35px; align-items: start; margin-bottom: 38px}
+.section-index{font-size: 11px; letter-spacing:.13em; text-transform:uppercase; color:#789a86; font-weight:750}
+h2{font-size:clamp(32px,4.5vw, 53px); line-height:1.08; letter-spacing:-.055em; font-weight:620;margin:0 0 18px}
+h3{font-size:20px; line-height:1.25; letter-spacing:-.03em; margin:0 0 12px}
+h4{font-size:14px; margin:0 0 8px; letter-spacing:-.01em}
+p{margin:0 0 14px; color: #6a7972}
+.lead{font-size: 17px; line-height: 1.8; max-width: 750px}
+.panel{background: var(--paper); border: 1px solid rgba(255,255,255,.9); box-shadow:var(--shadow); border-radius: var(--radius); padding:26px}
+.grid-2{display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:18px}
+.grid-3{display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:18px}
+.tag{display: inline-flex; padding:6px 10px; border-radius:999px;background:#edf4ef; color:#5d7e6b; font-size: 10px; font-weight:700; letter-spacing:.03em; margin:0 5px 6px 0}
+.tint-sage{background: linear-gradient(145deg, rgba(224,239,228,.8), rgba(255,255,255,.8))}
+.tint-blue{background: linear-gradient(145deg, rgba(225,238,248,.8), rgba(255,255,255,.8))}
+.tint-pink{background: linear-gradient(145deg, rgba(249,229,231,.8), rgba(255,255,255,.8))}
+.tint-lav{background: linear-gradient(145deg, rgba(237,232,248,.85), rgba(255,255,255,.8))}
+.tint-yellow{background: linear-gradient(145deg, rgba(250, 244, 216,.8), rgba(255,255,255,.8))}
+.number{width: 35px; height: 35px; border-radius: 12px; display:grid; place-items:center; background:rgba(255,255,255,.8); font-size: 12px; font-weight:750; color:#62816e; margin-bottom:20px}
+.research-card{min-height:230px}
+.research-card p{font-size:13px}
+.source-note{font-size:12px; border-left:2px solid #b7cbbd; padding: 4px 0 4px 14px; margin-top:18px}
+.table-wrap{overflow-x:auto; border-radius: 18px; border: 1px solid var(--line); background:rgba(255, 255, 255,.68)}
+table{border-collapse:collapse; width: 100%; min-width:760px; font-size:12px}
+th, td{text-align:left;vertical-align:top; padding: 17px 16px; border-bottom:1px solid var(--line)}
+th{font-size: 10px; letter-spacing:.1em; text-transform:uppercase; color: #5e7769; background:rgba(224,239,228,.42)}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:700;color:#34483e;width:18%}
+.insight-card{padding: 24px; border-radius: 22px;min-height: 190px; border:1px solid rgba(255,255,255,.85)}
+.insight-card symbol{font-size:24px; margin-bottom:17px}
+.insight-card p{font-size:13px}
+.callout{border-radius: 28px; padding: 32px; background: linear-gradient(125deg, #e3efe5, #e8edf8 55%, #f7e7e8); position:relative; overflow:hidden}
+.callout:after{content:""; position:absolute; width: 220px; height: 220px; border-radius: 50%; right:60px; top:-90px; background:rgba(255,255,255,.3)}
+.callout>*{position:relative;z-index:1}
+.quote{font-size:clamp(24px, 3vw, 37px); line-height:1.35; letter-spacing:-.04em; color:#33463c;max-width: 900px}
+.journey{display:grid; grid-template-columns: repeat(5,1fr); gap: 10px; margin-top:24px}
+.journey-step{position:relative; padding:18px 13px; background: rgba(255, 255, 255,.72); border:1px solid rgba(255, 255, 255,.95); border-radius: 18px; min-height:132px}
+.journey-step .step-no{font-size:10px;color:#799986; letter-spacing:.1em}
+.journey-step strong{display:block; margin:12px 0 5px; font-size:13px}
+.journey-step span:last-child{font-size:11px;color:var(--muted)}
+.ia-layout{display:grid; grid-template-columns: 1fr 1fr; gap:20px}
+.ia-tree{display:grid; gap:10px}
+.ia-root{padding: 14px 17px; border-radius: 14px; background: #30483b;color: white; font-weight: 700; font-size:13px}
+.ia-child{margin-left: 22px; padding:12px 15px; border-radius: 13px; background:rgba(255,255,255,.76); border:1px solid var(--line); font-size:12px; color: #52645a}
+.flow{display: flex; align-items: stretch; gap: 8px; overflow-x:auto; padding: 10px 2px 18px}
+.flow-step{min-width:125px; flex:1; background:rgba(255, 255, 255,.78); border:1px solid var(--line); border-radius: 16px; padding: 17px 13px; font-size:12px;font-weight:650; text-align:center; display: flex; align-items:center; justify-content:center}
+.flow-arrow{align-self:center; color: #9bb3a2; font-size:20px}
+.feature-intro{max-width: 780px}
+.feature-toolbar{display: flex; align-items: center; justify-content: space-between; gap: 16px; margin: 30px 0 20px; flex-wrap:wrap}
+.filter-buttons{display: flex; gap:8px; flex-wrap:wrap}
+.filter-btn{border:1px solid var(--line); background:rgba(255,255,255,.65); padding: 8px 13px; border-radius: 999px; font-size:11px; color: #6c7b73; cursor:pointer; transition:.2s}
+.filter-btn.active,.filter-btn:hover{background: #30483b; color: white; border-color: #30483b}
+.feature-list{display:grid; gap:17px}
+.feature-card{display:grid; grid-template-columns:.82fr 1.18fr; gap: 25px; padding: 25px; background:rgba(255, 255, 255,.72); border:1px solid rgba(255, 255, 255,.95); border-radius: 27px; box-shadow:0 12px 42px rgba(56,79,68,.045); transition: transform.25s, box-shadow .25s}
+.feature-card:hover{transform: translateY(-3px); box-shadow: var(--shadow)}
+.feature-card[hidden] {display:none}
+.feature-kicker{font-size:10px;color:#779684;letter-spacing:.13em; text-transform:uppercase; font-weight:800}
+.feature-card h3{font-size:25px; margin:9px 0 12px}
+.tech-stack{grid-column: 1/-1; border-top: 1px solid var(--line); padding-top: 17px; margin-top:2px}
+.tech-stack h4{font-size: 11px; text-transform:uppercase; letter-spacing:.12em;color:#789a86; margin:0 0 10px}
+.tech-chips{display: flex; flex-wrap:wrap; gap:7px}
+.tech-chip{font-size:11px; color:#436858; background:#e7f1eb; border:1px solid #d5e6dc; padding:7px 10px; border-radius:999px}
+.tech-note{font-size:11px;color:#768981; margin-top:9px}
+.feature-card p{font-size:13px}
+.feature-details {padding-left:17px;margin:15px 0 0;color:#697a71; font-size:12px}
+.feature-details li{padding:3px 0}
+.feature-toggle{margin-top: 18px; border: 0; background:#e7f0e9; color:#496c57; padding: 9px 13px; border-radius: 999px; font-size:11px; font-weight:700;cursor:pointer}
+.feature-extra{display:none; margin-top: 15px; padding: 15px; border-radius: 15px; background:rgba(238,244,239,.8); font-size:12px; color:#62736a}
+.feature-extra.open{display:block}
+
+/* Image Stack & Feature Image Layout for Vertical Scrolling */
+.image-stack{display: flex; flex-direction: row; align-items: flex-start; gap: 12px; height: 520px; max-height: 520px; overflow-x: auto; overflow-y: hidden; padding: 2px 8px 8px 2px; scrollbar-width: thin; scrollbar-color: #b6cdbd transparent}
+.image-stack::-webkit-scrollbar{height: 5px}
+.image-stack::-webkit-scrollbar-thumb{background: #b6cdbd; border-radius: 10px}
+
+.feature-image{position: relative; flex: 0 0 calc((100% - 24px)/3); min-width: 140px; height: 500px; border-radius: 20px; overflow-y: auto; overflow-x: hidden; scrollbar-width: thin; scrollbar-color: #c7c1ce transparent; background: linear-gradient(135deg, #e4eee7, #e7edf8 55%, #f7e5e7); border: 1px solid rgba(255,255,255,.95); display: block;}
+.feature-image img{display: block; width: 100%; height: auto; min-height: 100%; object-fit: cover;}
+.feature-image::-webkit-scrollbar{width: 4px}
+.feature-image::-webkit-scrollbar-thumb{background: #c7c1ce; border-radius: 8px}
+.feature-image img:not([src]), .feature-image img[src=""]{display:none}
+
+.image-placeholder {position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 18px; color: #6b8174; pointer-events: none; background: linear-gradient(135deg, #e4eee7, #e7edf8 55%, #f7e5e7); z-index: 1;}
+.image-placeholder b{font-size: 12px}
+.image-placeholder span{font-size: 10px; margin-top: 4px; opacity: .85}
+.feature-image.has-image .image-placeholder {display: none}
+
+.image-caption {position: absolute; left: 10px; bottom: 10px; background: rgba(255,255,255,.82); backdrop-filter: blur(10px); border-radius: 999px; padding: 5px 9px; font-size: 9px; color: #52685b; z-index: 2; pointer-events: none;}
+
+.small-label{font-size:10px; text-transform:uppercase; letter-spacing:.12em; color:#789a86; font-weight:750}
+.principles{display:grid; grid-template-columns: repeat(3,1fr); gap: 14px}
+.principle{padding: 20px; border: 1px solid var(--line); background:rgba(255,255,255,.55); border-radius:18px}
+.principle strong{display:block;font-size:13px;margin:0 0 7px}
+.principle p{font-size:12px;margin:0}
+.footer {padding:55px 0 38px; border-top: 1px solid var(--line); margin-top:30px}
+.footer-inner {max-width: 1180px; padding:0 28px; margin:auto; display: flex; justify-content: space-between; gap: 25px; align-items:flex-end; flex-wrap:wrap}
+.footer h2{font-size:34px;margin:12px 0}
+.footer p{font-size:12px}
+.back-top{border:1px solid var(--line); border-radius: 999px; padding:10px 14px; font-size: 11px; background:rgba(255,255,255,.6)}
+.reveal{opacity:0; transform: translateY(18px); transition:opacity .7s ease, transform .7s ease}
+.reveal.visible{opacity:1; transform: translateY(0)}
+.mobile-menu{display:none; border: 1px solid var(--line); background:rgba(255, 255, 255,.7); border-radius: 12px; padding: 8px 11px}
+
+@media (max-width: 900px){
+  .nav-links{gap:12px}
+  .nav-links a {display:none}
+  .nav-links a:nth-child(1),.nav-links a:nth-child(5) {display:block}
+  .hero{grid-template-columns:1fr; gap: 10px; padding-top: 55px}
+  .hero-visual{min-height:390px}
+  .section-head{grid-template-columns:1fr; gap:14px}
+  .journey{grid-template-columns: repeat(3,1fr)}
+  .feature-card{grid-template-columns:1fr}
+  .image-stack{height:480px; max-height:480px; overflow-x:auto; overflow-y:hidden}
+  .feature-image{height: 460px; flex-basis: 220px; flex-shrink:0}
+}
+@media (max-width:600px){
+  main{padding:0 18px}
+  .nav-wrap{padding:12px 18px}
+  .brand{font-size:13px}
+  .nav-cta{display:none}
+  h1{font-size:53px}
+  .hero-copy{font-size:15px}
+  .hero-visual{min-height: 330px}
+  .orb{width:270px}
+  .orbit{width:300px;height:180px}
+  .orbit.two{width:290px; height: 210px}
+  .hero-card{padding: 13px 14px}
+  .hero-card strong{font-size:12px}
+  .hero-card p{font-size:10px}
+  .card-one{left:-4px; top:10%}
+  .card-two{right:-2px; bottom:18%}
+  .card-three{left:0;bottom:0}
+  section{padding:60px 0}
+  .grid-2,.grid-3,.ia-layout,.principles{grid-template-columns:1fr}
+  .journey{grid-template-columns:1fr 1fr}
+  .journey-step{min-height:115px}
+  .feature-card{padding: 18px; border-radius: 22px}
+  .feature-card h3{font-size:22px}
+  .image-stack{height:420px; max-height:420px; gap:8px; overflow-x:auto; overflow-y:hidden}
+  .feature-image{height:400px; flex:0 0 205px; border-radius: 16px}
+  .tech-stack{margin-top:8px}
+  .flow-step{min-width:112px}
+  .panel{padding: 20px}
+  .footer-inner {padding:0 18px}
+}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after {scroll-behavior:auto!important; animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important}.reveal{opacity:1; transform:none}}
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+<div class="ambient" aria-hidden="true">
+<span class="bubble"></span><span class="bubble"></span><span class="bubble"></span><span class="bubble"></span><span class="bubble"></span>
+</div>
+<div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+<div class="nav-wrap">
+<nav aria-label="Main navigation">
+<a class="brand" href="#top"><span>Nura Treatment Journey</span></a>
+<div class="nav-links">
+<a href="#overview">Overview</a><a href="#research">Research</a><a href="#insights">Insights</a><a href="#strategy">Strategy</a><a href="#features">Features</a>
+</div>
+<a class="nav-cta" href="#reflection">Design reflection </a>
+</nav>
+</div>
+<main id="top">
+<header class="hero">
+<div class="hero-content">
+<div class="eyebrow">Independent product design concept</div>
+<h1>Healthcare, <br><em>one step</em><br>at a time.</h1>
+<p class="hero-copy">Exploring how a digital healthcare product can make an ongoing treatment journey clearer, easier to navigate, and less overwhelming from understanding today's next step to accessing the right support.</p>
+<div class="hero-actions">
+<a class="button primary" href="#research">Explore the research <span></span></a>
+<a class="button secondary" href="#features">View feature explorations <span></span></a>
+</div>
+<div class="hero-stats">
+<div class="stat"><strong>01</strong><span>Independent concept</span></div>
+<div class="stat"><strong>03</strong><span>Products researched</span></div>
+<div class="stat"><strong>09</strong><span>Feature explorations</span></div>
+</div>
+</div>
+<div class="hero-visual" aria-label="Abstract healthcare journey illustration">
+<div class="orb"></div><div class="orbit"></div><div class="orbit two"></div>
+<div class="hero-card card-one"><small><span class="status-dot"></span>Your treatment</small><strong>A little more clarity</strong><p>Know what comes next.</p></div>
+<div class="hero-card card-two"><small>Today's focus</small><strong>Review your next step</strong><p>One clear action at a time</p></div>
+<div class="hero-card card-three"><small>Care, connected</small><strong>You're not on your own</strong><p>Guidance with human support</p></div>
+</div>
+</header>
+<section id="overview" class="reveal">
+<div class="section-head">
+<div><div class="section-index">01 Project overview</div></div>
+<div><h2>Healthcare is more than a doctor's appointment.</h2><p class="lead">A treatment journey can include onboarding, medication, follow-ups, progress tracking, questions, and decisions. This concept explores how those moments might feel more connected through one patient-centered experience.</p></div>
+</div>
+<div class="grid-3">
+<article class="panel tint-sage"><div class="number">01</div><h3>Project</h3><p>Digital Treatment Journey</p><span class="tag">Healthcare UX</span><span class="tag">AI-supported care</span></article>
+<article class="panel tint-blue"><div class="number">02</div><h3>My role</h3><p>Independent Product Designer exploring research, information architecture, user flows, and early feature concepts.</p><span class="tag">Product design</span><span class="tag">UX research</span></article>
+<article class="panel tint-pink"><div class="number">03</div><h3>Goal</h3><p>Help patients understand their current treatment stage, what to do next, how progress is changing, and where to find appropriate support.</p><span class="tag">Clarity</span><span class="tag">Continuity</span></article>
+</div>
+<div class="panel" style="margin-top:18px">
+<div class="small-label">Research objective</div>
+<p style="font-size:15px; margin-top: 10px">Understand how digital healthcare platforms guide patients through onboarding, treatment, medication, progress tracking, check-ins, and communication with care teams then identify opportunities to make these experiences clearer and more connected.</p>
+<div class="source-note"><strong>Research approach:</strong> public company and product information, public FAQs, publicly described product experiences, and Product Designer job descriptions. This is desk research, not primary user research or an audit of private product interfaces.</div>
+</div>
+</section>
+<section id="research" class="reveal">
+<div class="section-head">
+<div><div class="section-index">02 Product research</div></div>
+<div><h2>Learning from different models of digital care.</h2><p class="lead">I explored three healthcare products to understand their scope, how they support patients over time, and what their approaches can teach a designer about complex healthcare journeys.</p></div>
+</div>
+<div class="grid-3">
+<article class="panel research-card tint-sage"><div class="number">A</div><h3>AIOS Medical</h3><p>A full-stack AI healthcare vision centered on an AI doctor, with healthcare delivery, clinical workflows, treatment access, and consumer-facing experiences.</p><span class="tag">AI-native care</span><span class="tag">Complex workflows</span><p class="source-note">Research focus: public company information and the publicly described Product Designer role.</p></article>
+<article class="panel research-card tint-blue"><div class="number">B</div><h3>Twin Health</h3><p>A digital healthcare platform focused on metabolic health, using its Digital Twin approach to translate health data into personalized guidance and ongoing support.</p><span class="tag">Personalization</span><span class="tag">Progress tracking</span><p class="source-note">Research focus: public product information about the app, personalized guidance, and care-team support.</p></article>
+<article class="panel research-card tint-lav"><div class="number">C</div><h3>Sword Health</h3><p>An AI Care platform supporting different health journeys, including musculoskeletal, women's, cardiometabolic, and mental health.</p><span class="tag">Ongoing care</span><span class="tag">Scalable experience</span><p class="source-note">Research focus: publicly described care model and patient-facing digital experiences.</p></article>
+</div>
+<div style="margin-top: 35px"><div class="small-label" style="margin-bottom: 13px">Competitor analysis</div>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Research area</th><th>AIOS Medical</th><th>Twin Health</th><th>Sword Health</th></tr></thead>
+<tbody>
+<tr><td>What does it build?</td><td>Full-stack AI healthcare platform centered around an AI doctor.</td><td>AI-powered digital healthcare focused primarily on metabolic health.</td><td>AI Care platform across several physical and mental health areas.</td></tr>
+<tr><td>Primary users</td><td>Healthcare consumers/patients, with broader clinical and operational workflows.</td><td>People managing metabolic health and related chronic conditions.</td><td>People seeking support for physical and mental health conditions.</td></tr>
+<tr><td>Patient-facing experience</td><td>Customer-facing web/mobile experiences, treatment access, and customer app flows.</td><td>App-based health monitoring, personalized guidance, progress, and care-team access.</td><td>Digital care experiences with personalized support and ongoing care.</td></tr>
+<tr><td>Role of AI</td><td>AI is central to its healthcare delivery vision and clinical workflows.</td><td>Health data is used to provide personalized insights and guidance through a Digital Twin approach.</td><td>AI is a core part of the Care platform and supports personalized healthcare experiences.</td></tr>
+<tr><td>AI + human care</td><td>Automation is designed within healthcare and clinical workflows.</td><td>AI-supported guidance works alongside doctors, coaches, and healthcare professionals.</td><td>AI-powered care is combined with clinical support when appropriate.</td></tr>
+<tr><td>Design takeaway</td><td>Simplify complex workflows, build trust, and make AI-human handoffs understandable.</td><td>Translate complex health data into clear, personalized guidance.</td><td>Organize multiple care journeys into a consistent, patient-centered experience.</td></tr>
+</tbody>
+</table>
+</div>
+<p class="source-note">This comparison summarizes publicly described positioning and product information. It is not a feature-by-feature usability evaluation, and the products' internal workflows are not assumed to be publicly visible.</p>
+</div>
+</section>
+<section id="aios" class="reveal">
+<div class="section-head">
+<div><div class="section-index">03 Focus research</div></div>
+<div><h2>What I took from AIOS Medical.</h2><p class="lead">The public description of AIOS's product and design work highlights the challenge of making customer-facing healthcare journeys work alongside complex clinical and operational systems.</p></div>
+</div>
+<div class="grid-2">
+<article class="panel"><h3>Journey areas to understand</h3><p>Based on the public-facing healthcare model, a broader journey may include:</p><div class="journey"><div class="journey-step"><span class="step-no">01</span><strong>Onboarding</strong><span>Get started and share relevant information.</span></div><div class="journey-step"><span class="step-no">02</span><strong>Assessment</strong><span>Understand needs and next steps.</span></div><div class="journey-step"><span class="step-no">03</span><strong>Clinical care</strong><span>Access appropriate healthcare support.</span></div><div class="journey-step"><span class="step-no">04</span><strong>Treatment</strong><span>Navigate prescriptions and medication.</span></div><div class="journey-step"><span class="step-no">05</span><strong>Ongoing care</strong><span>Track progress and get help when needed.</span></div></div><p class="source-note">This is a high-level journey interpretation for research, not a claim that every step follows this exact sequence within AIOS.</p></article>
+<article class="panel tint-sage"><h3>Design challenges I identified</h3>
+<ul class="feature-details">
+<li>Make complex healthcare journeys easy to understand.</li>
+<li>Communicate AI-generated information transparently.</li>
+<li>Reduce friction in customer app flows.</li>
+<li>Make treatment progress and next steps visible.</li>
+<li>Connect patients to human support when appropriate.</li>
+<li>Support clinical and operations workflows without overwhelming users.</li>
+<li>Design for accessibility, privacy, and high-stakes decisions.</li>
+</ul>
+<div class="source-note"><strong>Potential contribution:</strong> UX research, information architecture, user flows, wireframes, prototypes, UI design, and design systems focused on simplifying complex workflows.</div>
+</article>
+</div>
+<div class="callout" style="margin-top: 20px"><div class="small-label">Why this research is relevant</div><p class="quote" style="margin-top: 13px">"I wanted to understand the types of product challenges healthcare designers work on, so I began an independent concept exploring patient journeys, treatment workflows, AI interactions, and care-team experiences."</p><p style="margin-top: 16px; font-size:12px">This is my own concept informed by public research and design exploration not an AIOS replica or an official project.</p></div>
+<p class="source-note">Primary reference supplied for this research: <a href="https://aiosmedical.notion.site/working-at-aios?p=38720136c7d98077999df3c5567fe805&pm=s" target="_blank" rel="noreferrer"><u>AIOS Medical Working at AIOS</u></a>. Product details can change; verify current company information before using this research externally.</p>
+</section>
+<section id="insights" class="reveal">
+<div class="section-head">
+<div><div class="section-index">04 Synthesis</div></div>
+<div><h2>From product research to design opportunities.</h2><p class="lead">Across the three products, I identified recurring themes that could guide the design of a clearer treatment journey.</p></div>
+</div>
+<div class="grid-3">
+<article class="insight-card tint-sage"><div class="symbol"></div><h3>Translate complexity</h3><p>Healthcare information and workflows need to become understandable actions, not more information for patients to interpret alone.</p></article>
+<article class="insight-card tint-blue"><div class="symbol"></div><h3>Care continues over time</h3><p>Patients may need support between consultations: reminders, check-ins, progress context, and clarity about what happens next.</p></article>
+<article class="insight-card tint-pink"><div class="symbol"></div><h3>AI needs human context</h3><p>AI-supported guidance should communicate its limits and help people reach qualified human support when needed.</p></article>
+<article class="insight-card tint-lav"><div class="symbol"></div><h3>Personalize carefully</h3><p>Relevant health context can make guidance more useful, while privacy, consent, and clear explanations remain essential.</p></article>
+<article class="insight-card tint-yellow"><div class="symbol"></div><h3>Make progress visible</h3><p>Milestones, completed actions, and upcoming steps can help patients understand where they are in a longer journey.</p></article>
+<article class="insight-card tint-sage"><div class="symbol">@</div><h3>Different needs, one system</h3><p>A product needs consistent navigation and patterns while allowing care journeys to differ by condition and treatment plan.</p></article>
+</div>
+</section>
+<section id="strategy" class="reveal">
+<div class="section-head">
+<div><div class="section-index">05 Design direction</div></div>
+<div><h2>Make the next step feel clear.</h2><p class="lead">The concept focuses on the patient-facing treatment journey rather than attempting to design an entire healthcare platform.</p></div>
+</div>
+<div class="callout"><div class="small-label">Problem statement</div><p class="quote" style="margin-top:14px">Patients using digital healthcare services can find it difficult to understand their overall treatment journey, know what they need to do next, and navigate between AI guidance and human support.</p></div>
+<div class="panel" style="margin-top:18px"><div class="small-label">How might we?</div><h2 style="font-size:clamp(27px, 3.5vw, 39px); margin-top:14px; max-width: 900px">How might we make an ongoing healthcare journey clearer and easier to navigate, while helping patients understand their next steps and access the right support at the right time?</h2></div>
+<div class="section-head" style="margin-top: 40px; margin-bottom: 22px"><div><div class="section-index">Product scope</div></div><div><h3>What this concept will focus on</h3><p>Helping patients understand their current treatment stage, identify their next steps, receive understandable guidance, track progress, and access appropriate support.</p></div></div>
+<div class="grid-3">
+<article class="panel"><div class="number">01</div><h3>Home / Today</h3><p>Current treatment status, today's important actions, and a clear next step.</p></article>
+<article class="panel"><div class="number">02</div><h3>Treatment journey</h3><p>Current stage, completed milestones, and upcoming steps.</p></article>
+<article class="panel"><div class="number">03</div><h3>Personalized guidance</h3><p>AI-supported information, recommendations, and understandable explanations.</p></article>
+<article class="panel"><div class="number">04</div><h3>Progress</h3><p>Treatment progress, relevant health information, trends, and milestones.</p></article>
+<article class="panel"><div class="number">05</div><h3>Care & support</h3><p>Ways to contact the care team, get help, and reach human support.</p></article>
+<article class="panel tint-blue"><div class="number">+</div><h3>Exploration beyond core scope</h3><p>Additional ideas such as prescription uploads, medication, medical files, and family health profiles.</p></article>
+</div>
+</section>
+<section id="architecture" class="reveal">
+<div class="section-head">
+<div><div class="section-index">06 Information architecture</div></div>
+<div><h2>Organized around what patients need most.</h2><p class="lead">The navigation prioritizes everyday actions first, while keeping treatment, progress, guidance, and care support easy to find.</p></div>
+</div>
+<div class="ia-layout">
+<div class="panel tint-sage">
+<div class="small-label">Main navigation structure</div>
+<div class="ia-tree" style="margin-top:16px">
+<div class="ia-root">Home</div><div class="ia-child">Today's actions • Treatment status • Next step • Guidance summary</div>
+<div class="ia-root">Treatment</div><div class="ia-child">Current stage • Timeline • Upcoming steps • Completed milestones</div>
+<div class="ia-root">Progress</div><div class="ia-child">Treatment progress • Health trends • Milestones • History</div>
+<div class="ia-root">Guidance</div><div class="ia-child">AI guidance • Recommendations • Questions • Explanations</div>
+<div class="ia-root">Care & Support</div><div class="ia-child">Care team • Messages • Help • Escalation options</div>
+</div>
+</div>
+<div class="panel">
+<div class="small-label">Primary user flow</div><p style="margin-top: 13px">A simple, repeatable loop helps patients understand what to do, complete an action, and return to the journey with updated context.</p>
+<div class="flow" aria-label="User flow">
+<div class="flow-step">Open app</div><span class="flow-arrow">→</span><div class="flow-step">See status</div><span class="flow-arrow">→</span><div class="flow-step">View home</div>
+</div>
+<div class="flow">
+<div class="flow-step">View today's action</div><span class="flow-arrow">→</span><div class="flow-step">Receive guidance</div><span class="flow-arrow">→</span><div class="flow-step">Complete action</div>
+</div>
+<div class="flow">
+<div class="flow-step">Update progress</div><span class="flow-arrow">→</span><div class="flow-step">Get support if needed</div>
+</div>
+<div class="source-note">The flow is a conceptual starting point. Real flows would need validation with patients, clinicians, and relevant operational teams.</div>
+</div>
+</div>
+</section>
+<section id="features" class="reveal">
+<div class="section-head">
+<div><div class="section-index">07 Feature exploration</div></div>
+<div><h2>Additional ways to make care feel connected.</h2><p class="lead feature-intro">The following nine features extend the core treatment journey into practical patient needs. Each feature includes three vertically scrollable image slots. Replace the example paths with your own screenshots or mockups in the <code>img</code> folder.</p></div>
+</div>
+<div class="feature-toolbar">
+<div class="small-label">Explore the feature concepts</div>
+<div class="filter-buttons" role="group" aria-label="Filter features">
+<button class="filter-btn active" data-filter="all">All features 9</button>
+<button class="filter-btn" data-filter="care">Care & safety</button>
+<button class="filter-btn" data-filter="records">Records & medication</button>
+<button class="filter-btn" data-filter="guidance">Guidance & family</button>
+</div>
+</div>
+<div class="feature-list">
+<article class="feature-card" data-category="records">
+<div class="feature-copy"><div class="feature-kicker">Feature 01. Records & medication</div><h3>Prescription Upload</h3><p>Let patients upload a prescription and keep it connected to their treatment information, reducing the need to search across chats, folders, and paper documents.</p><ul class="feature-details"><li>Upload or photograph a prescription.</li><li>View the document and its upload date.</li><li>Keep prescription details available alongside medication information.</li></ul><button class="feature-toggle" aria-expanded="false">Explore design considerations +</button><div class="feature-extra">Design considerations: make document capture simple, show upload status, protect sensitive information, and avoid interpreting prescriptions without a qualified review. Any extracted details should be clearly marked for confirmation.</div></div>
+<div class="image-stack" aria-label="Prescription Upload images">
+<div class="feature-image"><img src="img/prescription-upload-1.png" alt="Prescription upload screen concept" loading="lazy"><div class="image-placeholder"><b>Image 01 Upload entry</b><span>img/prescription-upload-1.png</span></div><span class="image-caption">Upload entry</span></div>
+<div class="feature-image"><img src="img/prescription-upload-2.png" alt="Prescription preview screen concept" loading="lazy"><div class="image-placeholder"><b>Image 02. Document preview</b><span>img/prescription-upload-2.png</span></div><span class="image-caption">Document preview</span></div>
+<div class="feature-image"><img src="img/prescription-upload-3.png" alt="Prescription details screen concept" loading="lazy"><div class="image-placeholder"><b>Image 03 Prescription details</b><span>img/prescription-upload-3.png</span></div><span class="image-caption">Prescription details</span></div>
+</div>
+<div class="tech-stack"><h4>Suggested technology & integrations</h4><div class="tech-chips"><span class="tech-chip">OCR / document text extraction</span><span class="tech-chip">Secure cloud storage</span><span class="tech-chip">Encryption at rest and in transit</span><span class="tech-chip">Consent & access controls</span><span class="tech-chip">Human verification of extracted fields</span></div><p class="tech-note">Concept-level suggestions only. Final choices depend on region, privacy requirements, clinical validation, and available partners.</p></div>
+</article>
+<article class="feature-card" data-category="care">
+<div class="feature-copy"><div class="feature-kicker">Feature 02. Care & safety</div><h3>Emergency Support</h3><p>Provide a clear, easy-to-find route to emergency assistance when a patient needs urgent help, without making emergency actions confusing or difficult to reach.</p><ul class="feature-details"><li>Clearly distinguish emergency help from general support.</li><li>Offer a direct call option where available.</li><li>Explain what information may be shared and with whom.</li></ul><button class="feature-toggle" aria-expanded="false">Explore design considerations +</button><div class="feature-extra">Design considerations: avoid false reassurance, minimize steps, account for accidental taps, and adapt emergency options to the user's region. The concept must not imply that an app can dispatch emergency services unless a real service integration exists.</div></div>
+<div class="image-stack" aria-label="Emergency Support images">
+<div class="feature-image"><img src="img/emergency-support-1.png" alt="Emergency support entry screen concept" loading="lazy"><div class="image-placeholder"><b>Image 01 • Emergency entry</b><span>img/emergency-support-1.png</span></div><span class="image-caption">Emergency entry</span></div>
+<div class="feature-image"><img src="img/emergency-support-2.png" alt="Emergency action confirmation concept" loading="lazy"><div class="image-placeholder"><b>Image 02 Call for help</b><span>img/emergency-support-2.png</span></div><span class="image-caption">Call for help</span></div>
+<div class="feature-image"><img src="img/emergency-support-3.png" alt="Emergency information screen concept" loading="lazy"><div class="image-placeholder"><b>Image 03 Key information</b><span>img/emergency-support-3.png</span></div><span class="image-caption">Key information</span></div>
+</div>
+<div class="tech-stack"><h4>Suggested technology & integrations</h4><div class="tech-chips"><span class="tech-chip">GPS / device location permissions</span><span class="tech-chip">Click-to-call integration</span><span class="tech-chip">Maps & geocoding API</span><span class="tech-chip">Emergency-service directory by region</span><span class="tech-chip">Secure profile data access</span></div><p class="tech-note">Concept-level suggestions only. Final choices depend on region, privacy requirements, clinical validation, and available partners.</p></div>
+</article>
+<article class="feature-card" data-category="guidance">
+<div class="feature-copy"><div class="feature-kicker">Feature 03 Guidance & family</div><h3>Family Emergency Contacts</h3><p>Allow users to add trusted people who may be contacted during an emergency, with transparent consent and control over their contact details.</p><ul class="feature-details"><li>Add and update trusted contacts.</li><li>Choose contact relationships and preferred phone numbers.</li><li>Understand when and how a contact could be notified.</li></ul><button class="feature-toggle" aria-expanded="false">Explore design considerations +</button><div class="feature-extra">Design considerations: verify contact details, explain notification behavior before activation, let users remove contacts, and do not share health information with a contact without appropriate permission.</div></div>
+<div class="image-stack" aria-label="Family Emergency Contacts images">
+<div class="feature-image"><img src="img/family-contacts-1.png" alt="Emergency contacts overview concept" loading="lazy"><div class="image-placeholder"><b>Image 01 Contacts overview</b><span>img/family-contacts-1.png</span></div><span class="image-caption">Contacts overview</span></div>
+<div class="feature-image"><img src="img/family-contacts-2.png" alt="Add trusted contact concept" loading="lazy"><div class="image-placeholder"><b>Image 02 Add a contact</b><span>img/family-contacts-2.png</span></div><span class="image-caption">Add a contact</span></div>
+<div class="feature-image"><img src="img/family-contacts-3.png" alt="Contact permissions concept" loading="lazy"><div class="image-placeholder"><b>Image 03. Permissions</b><span>img/family-contacts-3.png</span></div><span class="image-caption">Permissions</span></div>
+</div>
+<div class="tech-stack"><h4>Suggested technology & integrations</h4><div class="tech-chips"><span class="tech-chip">Phone number validation</span><span class="tech-chip">OTP / contact verification</span><span class="tech-chip">Role-based access control</span><span class="tech-chip">Consent & notification preferences</span><span class="tech-chip">Encrypted contact storage</span></div><p class="tech-note">Concept-level suggestions only. Final choices depend on region, privacy requirements, clinical validation, and available partners.</p></div>
+</article>
+<article class="feature-card" data-category="care">
+<div class="feature-copy"><div class="feature-kicker">Feature 04. Care & safety</div><h3>Emergency Alert</h3><p>Explore an emergency alert flow that could help a user notify selected contacts and share relevant details when a supported emergency integration is available.</p><ul class="feature-details"><li>Make the alert action easy to understand.</li><li>Confirm which contacts and details are included.</li><li>Show a clear status after the alert is triggered.</li></ul><button class="feature-toggle" aria-expanded="false">Explore design considerations +</button><div class="feature-extra">Design considerations: show the exact action before it happens, provide feedback if delivery fails, and never suggest an alert was sent when it was not. Location sharing requires permission and clear disclosure.</div></div>
+<div class="image-stack" aria-label="Emergency Alert images">
+<div class="feature-image"><img src="img/emergency-alert-1.png" alt="Emergency alert action concept" loading="lazy"><div class="image-placeholder"><b>Image 01 Alert action</b><span>img/emergency-alert-1.png</span></div><span class="image-caption">Alert action</span></div>
+<div class="feature-image"><img src="img/emergency-alert-2.png" alt="Emergency alert confirmation concept" loading="lazy"><div class="image-placeholder"><b>Image 02. Confirmation</b><span>img/emergency-alert-2.png</span></div><span class="image-caption">Confirmation</span></div>
+<div class="feature-image"><img src="img/emergency-alert-3.png" alt="Alert status concept" loading="lazy"><div class="image-placeholder"><b>Image 03 Alert status</b><span>img/emergency-alert-3.png</span></div><span class="image-caption">Alert status</span></div>
+</div>
+<div class="tech-stack"><h4>Suggested technology & integrations</h4><div class="tech-chips"><span class="tech-chip">Push notifications</span><span class="tech-chip">SMS / voice notification provider</span><span class="tech-chip">GPS location sharing</span><span class="tech-chip">Delivery status & retry handling</span><span class="tech-chip">Audit logs and explicit consent</span></div><p class="tech-note">Concept-level suggestions only. Final choices depend on region, privacy requirements, clinical validation, and available partners.</p></div>
+</article>
+<article class="feature-card" data-category="records">
+<div class="feature-copy"><div class="feature-kicker">Feature 05. Records & medication</div><h3>Pharmacy & Medication</h3><p>Help patients find medication information and manage eligible prescriptions and orders in one place, with clear boundaries around what requires a valid prescription.</p><ul class="feature-details"><li>Search for medicines and review verified details.</li><li>Connect an eligible prescription when required.</li><li>Review a cart, delivery details, and order status.</li></ul><button class="feature-toggle" aria-expanded="false">Explore design considerations +</button><div class="feature-extra">Design considerations: use verified medicine information, communicate availability and delivery terms clearly, protect prescription data, and make pharmacist or clinician support accessible when questions require professional advice.</div></div>
+<div class="image-stack" aria-label="Pharmacy and Medication images">
+<div class="feature-image"><img src="img/pharmacy-medication-1.png" alt="Medication search concept" loading="lazy"><div class="image-placeholder"><b>Image 01 Search medicines</b><span>img/pharmacy-medication-1.png</span></div><span class="image-caption">Search medicines</span></div>
+<div class="feature-image"><img src="img/pharmacy-medication-2.png" alt="Medication details concept" loading="lazy"><div class="image-placeholder"><b>Image 02 Medicine details</b><span>img/pharmacy-medication-2.png</span></div><span class="image-caption">Medicine details</span></div>
+<div class="feature-image"><img src="img/pharmacy-medication-3.png" alt="Medication order tracking concept" loading="lazy"><div class="image-placeholder"><b>Image 03 Order tracking</b><span>img/pharmacy-medication-3.png</span></div><span class="image-caption">Order tracking</span></div>
+</div>
+<div class="tech-stack"><h4>Suggested technology & integrations</h4><div class="tech-chips"><span class="tech-chip">Medicine catalogue API</span><span class="tech-chip">Pharmacy / inventory integration</span><span class="tech-chip">Prescription validation workflow</span><span class="tech-chip">Secure checkout & payment gateway</span><span class="tech-chip">Order tracking notifications</span></div><p class="tech-note">Concept-level suggestions only. Final choices depend on region, privacy requirements, clinical validation, and available partners.</p></div>
+</article>
+<article class="feature-card" data-category="guidance">
+<div class="feature-copy"><div class="feature-kicker">Feature 06. Guidance & family</div><h3>AI Health Guidance</h3><p>An AI-assisted experience where users can ask about common health concerns and receive understandable general information and possible next steps.</p><ul class="feature-details"><li>Ask about common concerns such as cramps or joint pain.</li><li>Explain health information in plain language.</li><li>Identify when professional or urgent care may be needed.</li></ul><button class="feature-toggle" aria-expanded="false">Explore design considerations +</button><div class="feature-extra">Design considerations: communicate uncertainty, avoid presenting the AI as a diagnosis, protect sensitive conversation data, and use clear escalation guidance. High-risk symptoms should not be handled as routine self-care advice.</div></div>
+<div class="image-stack" aria-label="AI Health Guidance images">
+<div class="feature-image"><img src="img/ai-health-guidance-1.png" alt="AI health question screen concept" loading="lazy"><div class="image-placeholder"><b>Image 01 Ask a question</b><span>img/ai-health-guidance-1.png</span></div><span class="image-caption">Ask a question</span></div>
+<div class="feature-image"><img src="img/ai-health-guidance-2.png" alt="Plain language guidance concept" loading="lazy"><div class="image-placeholder"><b>Image 02 Clear guidance</b><span>img/ai-health-guidance-2.png</span></div><span class="image-caption">Clear guidance</span></div>
+<div class="feature-image"><img src="img/ai-health-guidance-3.png" alt="When to seek support concept" loading="lazy"><div class="image-placeholder"><b>Image 03 Support options</b><span>img/ai-health-guidance-3.png</span></div><span class="image-caption">Support options</span></div>
+</div>
+<div class="tech-stack"><h4>Suggested technology & integrations</h4><div class="tech-chips"><span class="tech-chip">LLM / conversational AI API</span><span class="tech-chip">Retrieval-augmented generation (RAG)</span><span class="tech-chip">Trusted clinical content sources</span><span class="tech-chip">Safety triage and escalation rules</span><span class="tech-chip">Privacy filtering & monitoring</span></div><p class="tech-note">Concept-level suggestions only. Final choices depend on region, privacy requirements, clinical validation, and available partners.</p></div>
+</article>
+<article class="feature-card" data-category="guidance">
+<div class="feature-copy"><div class="feature-kicker">Feature 07. Guidance & family</div><h3>Food & Nutrition Suggestions</h3><p>Offer general food and nutrition information that helps users explore everyday choices in relation to their questions and goals, without replacing individualized medical advice.</p><ul class="feature-details"><li>Browse practical meal and food ideas.</li><li>Explore suggestions around stated goals or preferences.</li><li>Explain the limits of general nutrition guidance.</li></ul><button class="feature-toggle" aria-expanded="false">Explore design considerations +</button><div class="feature-extra">Design considerations: account for allergies, cultural preferences, accessibility, and relevant medical constraints. Avoid unsupported claims, extreme recommendations, or treating general information as a personalized clinical plan.</div></div>
+<div class="image-stack" aria-label="Food and Nutrition Suggestions images">
+<div class="feature-image"><img src="img/food-nutrition-1.png" alt="Nutrition preferences concept" loading="lazy"><div class="image-placeholder"><b>Image 01. Preferences</b><span>img/food-nutrition-1.png</span></div><span class="image-caption">Preferences</span></div>
+<div class="feature-image"><img src="img/food-nutrition-2.png" alt="Food suggestion screen concept" loading="lazy"><div class="image-placeholder"><b>Image 02. Food ideas</b><span>img/food-nutrition-2.png</span></div><span class="image-caption">Food ideas</span></div>
+<div class="feature-image"><img src="img/food-nutrition-3.png" alt="Nutrition information concept" loading="lazy"><div class="image-placeholder"><b>Image 03 Helpful context</b><span>img/food-nutrition-3.png</span></div><span class="image-caption">Helpful context</span></div>
+</div>
+<div class="tech-stack"><h4>Suggested technology & integrations</h4><div class="tech-chips"><span class="tech-chip">Nutrition database API</span><span class="tech-chip">Preference and allergy profiles</span><span class="tech-chip">Rules-based recommendation engine</span><span class="tech-chip">Optional AI explanation layer</span><span class="tech-chip">Clinician-reviewed content</span></div><p class="tech-note">Concept-level suggestions only. Final choices depend on region, privacy requirements, clinical validation, and available partners.</p></div>
+</article>
+<article class="feature-card" data-category="guidance">
+<div class="feature-copy"><div class="feature-kicker">Feature 08. Guidance & family</div><h3>Family & Kids Health Space</h3><p>Help people keep family health information organized through separate profiles, with carefully managed access for trusted collaborators.</p><ul class="feature-details"><li>Create profiles for children, parents, or a partner where appropriate.</li><li>Organize medications, allergies, records, and appointments by person.</li><li>Invite collaborators and choose what they can access.</li></ul><button class="feature-toggle" aria-expanded="false">Explore design considerations +</button><div class="feature-extra">Design considerations: separate each person's records, establish age-appropriate consent and guardian permissions, provide clear access controls, and make it easy to review or revoke collaborator access.</div></div>
+<div class="image-stack" aria-label="Family and Kids Health Space images">
+<div class="feature-image"><img src="img/family-health-1.png" alt="Family health profiles concept" loading="lazy"><div class="image-placeholder"><b>Image 01 Family profiles</b><span>img/family-health-1.png</span></div><span class="image-caption">Family profiles</span></div>
+<div class="feature-image"><img src="img/family-health-2.png" alt="Family member health summary concept" loading="lazy"><div class="image-placeholder"><b>Image 02 Health summary</b><span>img/family-health-2.png</span></div><span class="image-caption">Health summary</span></div>
+<div class="feature-image"><img src="img/family-health-3.png" alt="Collaborator access settings concept" loading="lazy"><div class="image-placeholder"><b>Image 03 Shared access</b><span>img/family-health-3.png</span></div><span class="image-caption">Shared access</span></div>
+</div>
+<div class="tech-stack"><h4>Suggested technology & integrations</h4><div class="tech-chips"><span class="tech-chip">Multi-profile data model</span><span class="tech-chip">Guardian consent & permissions</span><span class="tech-chip">Role-based access control</span><span class="tech-chip">Secure record separation</span><span class="tech-chip">Activity and access audit logs</span></div><p class="tech-note">Concept-level suggestions only. Final choices depend on region, privacy requirements, clinical validation, and available partners.</p></div>
+</article>
+<article class="feature-card" data-category="records">
+<div class="feature-copy"><div class="feature-kicker">Feature 09. Records & medication</div><h3>Medical Files</h3><p>Give patients a secure, organized place for important health documents so they can find relevant information when preparing for appointments or managing ongoing care.</p><ul class="feature-details"><li>Upload reports, prescriptions, and test results.</li><li>Organize conditions, allergies, diagnoses, labs, and vaccinations.</li><li>Find hospital, doctor, and visit records when needed.</li></ul><button class="feature-toggle" aria-expanded="false">Explore design considerations +</button><div class="feature-extra">Design considerations: support clear document labels and dates, provide search and filtering, use privacy-conscious access controls, and communicate storage, sharing, and deletion policies in plain language.</div></div>
+<div class="image-stack" aria-label="Medical Files images">
+<div class="feature-image"><img src="img/medical-files-1.png" alt="Medical files overview concept" loading="lazy"><div class="image-placeholder"><b>Image 01 Files overview</b><span>img/medical-files-1.png</span></div><span class="image-caption">Files overview</span></div>
+<div class="feature-image"><img src="img/medical-files-2.png" alt="Medical document details concept" loading="lazy"><div class="image-placeholder"><b>Image 02 Document details</b><span>img/medical-files-2.png</span></div><span class="image-caption">Document details</span></div>
+<div class="feature-image"><img src="img/medical-files-3.png" alt="Medical record categories concept" loading="lazy"><div class="image-placeholder"><b>Image 03 Record categories</b><span>img/medical-files-3.png</span></div><span class="image-caption">Record categories</span></div>
+</div>
+<div class="tech-stack"><h4>Suggested technology & integrations</h4><div class="tech-chips"><span class="tech-chip">FHIR-compatible health data model</span><span class="tech-chip">Secure file/object storage</span><span class="tech-chip">OCR and metadata extraction</span><span class="tech-chip">Search, tags & document indexing</span><span class="tech-chip">Encryption and access audit logs</span></div><p class="tech-note">Concept-level suggestions only. Final choices depend on region, privacy requirements, clinical validation, and available partners.</p></div>
+</article>
+</div>
+<p class="source-note">Image setup: place your own files inside a folder named <code>img</code> beside this HTML file. Keep the filenames shown under each image slot, or update each <code>src</code> value to match your files. PNG, JPG, and WebP files work in modern browsers.</p>
+</section>
+<section id="reflection" class="reveal">
+<div class="section-head">
+<div><div class="section-index">08 Design principles</div></div>
+<div><h2>Trust is part of the interface.</h2><p class="lead">Healthcare design needs to account for moments when people may feel worried, rushed, or unfamiliar with medical language. The interface should make information and actions easier to understand, while respecting the limits of digital guidance.</p></div>
+</div>
+<div class="principles">
+<div class="principle"><strong>Clarity</strong><p>Make the current status and next step easy to understand.</p></div>
+<div class="principle"><strong>Trust & transparency</strong><p>Explain what AI can and cannot do, and make uncertainty visible.</p></div>
+<div class="principle"><strong>Patient control</strong><p>Help people understand their choices and manage their information.</p></div>
+<div class="principle"><strong>Safety</strong><p>Make appropriate clinical or emergency support easy to find.</p></div>
+<div class="principle"><strong>Accessibility</strong><p>Use plain language, readable type, and accessible interactions.</p></div>
+<div class="principle"><strong>Continuity</strong><p>Connect actions, progress, records, and support over time.</p></div>
+</div>
+<div class="callout" style="margin-top: 22px">
+<div class="small-label">Reflection & next steps</div>
+<p class="quote" style="margin-top:14px">The next step is to validate these assumptions with patients and healthcare professionals, prioritize the most valuable feature, and test early prototypes for clarity, accessibility, and trust.</p>
+<p style="margin-top: 14px; font-size: 12px">This project represents my current understanding and exploration of the problem space. I am open to feedback, new evidence, and adapting the research or design direction to real product needs.</p>
+</div>
+</section>
+</main>
+<footer class="footer">
+<div class="footer-inner">
+<div><div class="eyebrow">Designed with curiosity and care</div><h2>One clearer step<br>at a time.</h2><p>Independent product design concept Designed by Pavithra S.</p></div>
+<a class="back-top" href="#top">Back to top ↑</a>
+</div>
+</footer>
+<script>
+// Progress indicator
+const progressBar = document.getElementById('progressBar');
+function updateProgress(){
+  const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
+  progressBar.style.width = progress + '%';
+}
+window.addEventListener('scroll', updateProgress, {passive:true});
+updateProgress();
+
+// Cursor glow follows the pointer
+const cursorGlow = document.getElementById('cursorGlow');
+let pointerX = window.innerWidth / 2, pointerY = window.innerHeight / 2;
+window.addEventListener('pointermove', (event) => {
+  pointerX = event.clientX; pointerY = event.clientY;
+  cursorGlow.style.left = pointerX + 'px';
+  cursorGlow.style.top = pointerY + 'px';
+}, {passive:true});
+if (window.matchMedia('(pointer: coarse)').matches) cursorGlow.style.display = 'none';
+
+// Reveal sections as they enter the viewport.
+const revealObserver = new IntersectionObserver ((entries) => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, {threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+// Highlight the navigation link for the section currently in view.
+const navLinks = [...document.querySelectorAll('.nav-links a')];
+const sectionObserver = new IntersectionObserver ((entries) => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting) {
+      navLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href') === '#' + entry.target.id));
+    }
+  });
+}, {rootMargin:'-25% 0px -60% 0px'});
+document.querySelectorAll('main section[id]').forEach(section => sectionObserver.observe(section));
+
+// Expand/collapse feature design considerations.
+document.querySelectorAll('.feature-toggle').forEach(button => {
+  button.addEventListener('click', () => {
+    const extra = button.nextElementSibling;
+    const isOpen = extra.classList.toggle('open');
+    button.setAttribute('aria-expanded', String(isOpen));
+    button.textContent = isOpen ? 'Hide design considerations' : 'Explore design considerations +';
+  });
+});
+
+// Feature category filters.
+const filterButtons = document.querySelectorAll('.filter-btn');
+const featureCards = document.querySelectorAll('.feature-card');
+filterButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    filterButtons.forEach(item => item.classList.toggle('active', item === button));
+    const filter = button.dataset.filter;
+    featureCards.forEach(card => {
+      card.hidden = filter !== 'all' && card.dataset.category !== filter;
+    });
+  });
+});
+
+// Swap placeholder for image when loaded successfully.
+document.querySelectorAll('.feature-image img').forEach(img => {
+  const setLoaded = () => {
+    if(img.complete && img.naturalWidth > 0)
+      img.parentElement.classList.add('has-image');
+  };
+  img.addEventListener('load', setLoaded);
+  img.addEventListener('error', () => img.parentElement.classList.remove('has-image'));
+  setLoaded();
+});
+</script>
+</body>
+</html>
